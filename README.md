@@ -2,11 +2,17 @@
 
 面向**昆明医科大学 349 药学综合自命题**的本地刷题工具，覆盖**药理学、药物化学、药剂学、药物分析**四科，适合按教材章节刷题、组卷和整理复习记录。
 
-这是我备考时赶工做的自用系统。这次整理的是多智能体协作前的版本。公开仓库提供程序和少量自编样题，正式练习内容由你自己收集、整理并导入。欢迎 fork、修改并做成自己的独立版本。后续我计划重做题库导入和科目配置，支持个人直接上传资料，逐步适配更多专业课。
+这是我备考时赶工做的自用系统。这次整理的是多智能体协作前的版本。仓库代码含 8 道自编演示题，完整练习数据由我自备的资料整理，随 Release 公布。你也可以自行整理资料并导入。欢迎 fork、修改并做成自己的独立版本。后续我计划重做题库导入和科目配置，支持个人直接上传资料，逐步适配更多专业课。
+
+## 下载正式版
+
+在 [Releases](https://github.com/Aniyasama-hub/kmmu349pass/releases/latest) 下载 Windows 完整包。它内置协作前版本的 **8,302 道题**、**3,239 条知识词条**和 **214 张题图**。完整包解压后可用启动器直接刷题。
+
+[题库元信息包](https://github.com/Aniyasama-hub/kmmu349pass/releases/download/v0.1.0/kmmu349pass-v0.1.0-question-bank.zip) 单独提供题目和词条 JSON 与配套题图。解压后可查看数据，或用下文的工具导入。题目来自自备真题、复习资料和习题，题内记录了现有出处。
 
 ## 安装与启动
 
-1. 在 GitHub 点击 **Code → Download ZIP** 并解压，或使用 `git clone https://github.com/Aniyasama-hub/kmmu349pass.git`。
+1. 使用 Windows 完整包时直接解压。使用源码版时，在 GitHub 点击 **Code → Download ZIP** 并解压，或使用 `git clone https://github.com/Aniyasama-hub/kmmu349pass.git`。
 2. Windows 安装 **Python 3.10 或更新版本**，确保 `py` 或 `python` 可在终端使用。浏览器建议使用近期版本的 Edge 或 Chrome。
 3. 双击 `启动题库.cmd`。也可以在项目根目录执行 `python -X utf8 local_study.py`，然后打开 `http://127.0.0.1:8949/`。
 
@@ -47,4 +53,4 @@ python -X utf8 tools/prepare_bank.py "D:/我的资料/题目元信息.json" --te
 
 用启动器进入时，Windows 默认将记录写入 `%LOCALAPPDATA%\Kunming349\profile.json`。错题、收藏、笔记、考试日期、历史作答和统计由每位用户的设备自行保存。直接打开 HTML 时使用当前浏览器存储。齿轮菜单可导出和导入个人备份。要隔离多个题库的记录，可同时指定独立的端口和 `--profile` 路径，例如 `python -X utf8 local_study.py --port 8950 --profile .local/另一套-profile.json`。
 
-公开仓库中的样题仅用于演示操作，只有自带真题数据时才会在真题训练中显示年份。欢迎围绕资料导入、题库结构和多科适配提交改进或维护自己的分支。
+源码包中的自编样题用于演示操作。完整包和含真题的自备题库会按所收录的年份显示真题训练。欢迎围绕资料导入、题库结构和多科适配提交改进或维护自己的分支。
