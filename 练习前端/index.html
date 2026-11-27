@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>昆医 349 · 药学练习</title>
+  <link rel="stylesheet" href="study.css">
+  <script defer src="profile-boot.js"></script>
+  <script defer src="profile.js"></script>
+  <script defer src="题库.js"></script>
+  <script defer src="知识库.js"></script>
+  <script defer src="knowledge.js"></script>
+  <script defer src="progress.js"></script>
+  <script defer src="grading.js"></script>
+  <script defer src="study.js"></script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap top">
+      <h1 class="brand"><span class="brand-mark" aria-hidden="true"></span>昆医 <strong>349</strong><span class="brand-note">药学综合</span></h1>
+      <div class="study-stats" aria-label="学习统计">
+        <button type="button" id="exam-countdown" class="countdown-button"></button>
+        <span id="study-days"></span>
+        <span id="choice-accuracy" title="统计已判分的客观题，包括标为「不会」的题目"></span>
+        <span id="subjective-accuracy" title="统计已核对且有采分点的主观题，以及标为「不会」的主观题"></span>
+      </div>
+      <button type="button" id="open-preferences" class="settings-icon" aria-label="设置" title="设置" aria-haspopup="dialog" aria-controls="preferences">
+        <svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true">
+          <path d="M10 2.8h4l.5 2.5 1.7 1 2.4-.8 2 3.5-1.9 1.7v2l1.9 1.7-2 3.5-2.4-.8-1.7 1-.5 2.5h-4l-.5-2.5-1.7-1-2.4.8-2-3.5 1.9-1.7v-2L3.4 9l2-3.5 2.4.8 1.7-1z"/>
+          <circle cx="12" cy="11.7" r="3"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+  <dialog id="preferences" aria-labelledby="preferences-title">
+    <form id="preferences-form">
+      <h2 id="preferences-title">设置</h2>
+      <fieldset class="preference-group">
+        <legend>答题</legend>
+        <label class="preference-check"><input name="skipCorrect" type="checkbox"> 答对后自动进入下一题</label>
+        <label class="preference-check"><input name="shuffleOptions" type="checkbox"> 随机排列选项</label>
+        <label class="preference-check"><input name="showExclusions" type="checkbox"> 显示选项排除按钮</label>
+        <div class="field"><label for="wrong-policy">错题移出规则</label>
+          <select id="wrong-policy" name="wrongThreshold">
+            <option value="1">答对一次后自动移出</option>
+            <option value="3">连续答对三次后自动移出</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="rubric-threshold">主观题关键词匹配置信度</label>
+          <select id="rubric-threshold" name="rubricThreshold" aria-describedby="rubric-threshold-help">
+            <option value="55">55% · 宽松</option>
+            <option value="65">65% · 默认</option>
+            <option value="75">75%</option>
+            <option value="85">85% · 严格</option>
+            <option value="100">100% · 仅匹配原词或收录别名</option>
+          </select>
+          <small id="rubric-threshold-help" class="field-help">阈值越低，越容易接受错别字和近似写法。数值与单位按采分点核对。</small>
+        </div>
+      </fieldset>
+      <fieldset class="preference-group">
+        <legend>学习计划</legend>
+        <div class="field"><label for="exam-date">考研日期</label><input name="examDate" id="exam-date" type="date"></div>
+      </fieldset>
+      <fieldset class="preference-group">
+        <legend>外观</legend>
+        <div class="preference-appearance">
+          <div class="field"><label for="text-size">字号</label><select name="textSize" id="text-size"><option value="small">小</option><option value="standard">标准</option><option value="large">大</option></select></div>
+          <div class="field"><label for="page-width">页面宽度</label><select name="pageWidth" id="page-width"><option value="compact">紧凑</option><option value="standard">标准</option><option value="wide">宽屏</option></select></div>
+        </div>
+      </fieldset>
+      <fieldset class="preference-group profile-controls">
+        <legend>个人数据</legend>
+        <p id="profile-location" class="scope"></p>
+        <div class="choice-actions">
+          <button type="button" class="button secondary" id="export-profile">备份个人数据</button>
+          <button type="button" class="button secondary" id="import-profile">导入备份</button>
+          <input type="file" id="profile-file" accept=".json,application/json" hidden>
+        </div>
+      </fieldset>
+      <p id="preference-note" class="scope" role="status" hidden></p>
+      <button type="button" id="close-preferences" class="button primary">完成</button>
+    </form>
+  </dialog>
+  <dialog id="resume-dialog" aria-labelledby="resume-heading">
+    <h2 id="resume-heading">继续上次练习？</h2>
+    <p id="resume-summary"></p>
+    <div class="choice-actions">
+      <button type="button" id="resume-study" class="button primary">继续作答</button>
+      <button type="button" id="resume-later" class="button secondary">暂不继续</button>
+    </div>
+  </dialog>
+  <main class="wrap study-shell">
+    <aside class="study-sidebar" aria-label="题库菜单与筛选">
+      <nav aria-label="题库与复习" id="modes">
+        <div class="mode-group" role="group" aria-label="题库">
+          <button type="button" class="mode" data-mode="featured" aria-pressed="true">精选题库</button>
+          <button type="button" class="mode" data-mode="study" aria-pressed="false">强化题库</button>
+          <button type="button" class="mode" data-mode="mock" aria-pressed="false">冲刺模拟</button>
+          <button type="button" class="mode" data-mode="exam" aria-pressed="false">真题训练</button>
+          <button type="button" class="mode" data-mode="knowledge" aria-pressed="false">知识导航</button>
+        </div>
+        <div class="mode-group personal-modes" role="group" aria-label="我的复习">
+          <button type="button" class="mode" data-mode="favorites" aria-pressed="false">收藏 <span class="mode-count" id="favorites-count"></span></button>
+          <button type="button" class="mode" data-mode="wrong" aria-pressed="false">错题库 <span class="mode-count" id="wrong-count"></span></button>
+          <button type="button" class="mode" data-mode="notes" aria-pressed="false">笔记 <span class="mode-count" id="notes-count"></span></button>
+        </div>
+      </nav>
+      <section class="settings" id="scope-panel" aria-labelledby="settings-title">
+        <h2 id="settings-title">选择范围</h2>
+        <form id="settings">
+          <div class="field" id="subject-field"><label for="subject">科目</label><select id="subject"></select></div>
+          <div class="field filter-field"><label for="chapter">章节</label><select id="chapter"></select></div>
+          <div class="field filter-field"><label for="topic">考点</label><select id="topic"></select></div>
+          <div class="field filter-field"><label for="query" id="query-label">搜索题干</label><input id="query" type="search" placeholder="输入药名或关键词" autocomplete="off"></div>
+          <div class="field exam-only" hidden><label for="year">真题年份</label><select id="year"></select></div>
+          <div class="exam-only check-field" hidden><label><input id="include-recall" type="checkbox"> 包含回忆真题</label></div>
+          <div class="field mock-only" hidden><label for="size">抽题数量</label><input id="size" type="number" value="20" min="1" max="200"></div>
+          <div class="field mock-only" hidden><label for="mix">题源</label><select id="mix"><option value="mixed">真题与习题混抽</option><option value="practice">只抽习题</option><option value="exam">只抽真题</option></select></div>
+          <div class="field mock-only" hidden><label for="time-limit">考试限时</label><select id="time-limit"><option value="0">不限时</option><option value="15">15 分钟</option><option value="30">30 分钟</option><option value="60">60 分钟</option></select></div>
+          <fieldset id="question-types" class="scope-types">
+            <legend>题型</legend>
+            <label><input id="type-single" type="checkbox" checked> 单选题</label>
+            <label><input id="type-multiple" type="checkbox" checked> 多选题</label>
+            <label><input id="type-written" type="checkbox" checked> 解答题</label>
+            <label><input id="type-calculation" type="checkbox" checked> 计算题</label>
+            <label><input id="type-other-choice" type="checkbox" checked> 判断与配伍题</label>
+          </fieldset>
+          <div id="scope-progress" class="scope-progress" hidden>
+            <span id="scope-progress-label">学习进度</span>
+            <div class="scope-meter" role="progressbar" aria-labelledby="scope-progress-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <span id="scope-fill"></span><span id="scope-score"></span>
+              <div class="scope-accuracy"><span id="scope-objective"></span><span id="scope-subjective"></span></div>
+            </div>
+          </div>
+          <output id="availability" aria-live="polite"></output>
+          <button type="submit" class="button primary" id="start">开始专项</button>
+        </form>
+        <p id="scope-note" class="scope"></p>
+        <p id="storage-note" class="scope" role="status" hidden></p>
+      </section>
+    </aside>
+    <section id="knowledge-panel" class="knowledge-panel" aria-labelledby="knowledge-heading" hidden>
+      <div class="knowledge-search">
+        <h2 id="knowledge-heading">知识导航</h2>
+        <label class="visually-hidden" for="knowledge-query">搜索药名与教材术语</label>
+        <input id="knowledge-query" type="search" placeholder="搜索药名、教材术语或英文缩写" autocomplete="off">
+      </div>
+      <div class="knowledge-layout">
+        <div class="knowledge-browser">
+          <p id="knowledge-count" role="status"></p>
+          <ul id="knowledge-list" class="knowledge-list"></ul>
+          <button type="button" id="knowledge-more" class="button secondary" hidden>查看更多结果</button>
+        </div>
+        <article id="knowledge-detail" class="term-detail" tabindex="-1" aria-label="词条释义"></article>
+      </div>
+    </section>
+    <div class="layout" id="exercise-panel">
+      <section class="workspace" id="question-workspace" aria-label="题目区">
+        <div id="idle" class="empty">
+          <h2 id="mode-title">精选题库</h2>
+          <p id="mode-description"></p>
+          <div id="favorite-kinds" class="saved-kind" role="group" aria-label="收藏类型" hidden>
+            <button type="button" data-kind="questions" aria-pressed="true">题目</button>
+            <button type="button" data-kind="terms" aria-pressed="false">名词解释</button>
+          </div>
+          <div id="saved-export" class="saved-export" hidden>
+            <label class="visually-hidden" for="export-format">导出文件格式</label>
+            <select id="export-format"><option value="md">Markdown（.md）</option><option value="txt">纯文本（.txt）</option></select>
+            <button type="button" class="button secondary" id="export-saved">批量导出</button>
+          </div>
+          <div id="saved-library" hidden></div>
+          <section id="saved-terms" aria-label="收藏的名词解释" hidden>
+            <ul id="saved-term-list" class="knowledge-list"></ul>
+            <article id="saved-term-detail" class="term-detail" tabindex="-1" aria-label="收藏词条释义" hidden></article>
+          </section>
+        </div>
+        <article id="question" hidden tabindex="-1">
+          <div class="position">
+            <span id="number"></span><progress id="progress" max="1" value="0"></progress>
+            <span id="elapsed" class="elapsed" hidden></span>
+          </div>
+          <p class="chapter" id="where"></p>
+          <p class="source-line"><span class="origin">来源　<span id="origin"></span></span><span id="origin-locator"></span></p>
+          <h2 id="stem"></h2>
+          <div id="question-tools" class="question-tools">
+            <button type="button" class="button secondary" id="add-wrong" hidden>加入错题库</button>
+            <button type="button" class="button secondary" id="mastered" hidden>标为已掌握</button>
+          </div>
+          <p id="wrong-streak" class="scope" hidden></p>
+          <p id="tool-status" class="tool-status" aria-live="polite"></p>
+          <div id="stem-images"></div>
+          <fieldset id="options" hidden>
+            <legend class="visually-hidden">作答选项</legend>
+            <div id="option-list"></div>
+          </fieldset>
+          <div id="response-field" class="field" hidden>
+            <label for="response">我的作答</label>
+            <textarea id="response" rows="4" aria-describedby="attempt-status" placeholder="写下要点或计算步骤"></textarea>
+            <div class="choice-actions">
+              <span id="attempt-status" role="status"></span>
+              <button type="button" class="button secondary" id="retry-response" hidden>再答一次</button>
+            </div>
+          </div>
+          <div class="answer-actions">
+            <button type="button" class="button secondary" id="back-to-library" hidden>返回列表</button>
+            <button type="button" class="button secondary" id="back-to-result" hidden>返回练习结果</button>
+            <button type="button" class="button primary" id="finish" hidden>提交试卷</button>
+          </div>
+        </article>
+        <section id="summary" class="summary" hidden tabindex="-1">
+          <h2 id="result-heading">练习结果</h2>
+          <p id="result"></p>
+          <dl class="result-accuracy">
+            <div><dt>客观题正确率</dt><dd id="result-secondary"></dd></div>
+            <div><dt>主观题正确率</dt><dd id="result-subjective"></dd></div>
+          </dl>
+          <p id="result-note" class="field-help"></p>
+          <h3 id="result-questions-heading">逐题结果</h3>
+          <div class="nav-legend" aria-hidden="true">
+            <span data-state="correct">答对</span><span data-state="wrong">答错</span>
+            <span data-state="unanswered">未作答</span><span data-state="awaiting">可人工核对</span>
+          </div>
+          <div id="result-questions" role="group" aria-labelledby="result-questions-heading"></div>
+          <div class="answer-actions"><button type="button" class="button primary" id="restart">返回选题</button><button type="button" class="button secondary" id="review">逐题核对</button></div>
+        </section>
+      </section>
+      <div id="study-navigation" class="study-navigation" role="group" aria-label="作答、翻题与查看答案" hidden>
+        <button type="button" class="button secondary" id="prev">上一题</button>
+        <div class="study-response-actions">
+          <div class="study-confirmation" id="choice-actions" hidden>
+            <button type="button" class="button primary" id="check-options" disabled>确认选项</button>
+            <span id="choice-status" role="status" hidden>选项已确认</span>
+            <button type="button" class="button secondary" id="edit-options" hidden>修改选项</button>
+          </div>
+          <button type="button" class="button secondary" id="dont-know">不会</button>
+        </div>
+        <button type="button" class="button secondary" id="next">下一题</button>
+        <button type="button" class="button secondary" id="favorite" aria-pressed="false">收藏本题</button>
+        <button type="button" class="button secondary" id="edit-note" aria-expanded="false" aria-controls="note-editor">写笔记</button>
+        <button type="button" class="button secondary" id="reveal" aria-controls="solution" aria-expanded="false">看答案</button>
+      </div>
+      <div id="study-splitter" class="study-splitter" role="separator" tabindex="0"
+        aria-label="调整题目区宽度" aria-orientation="vertical" aria-controls="question-workspace solution-panel"
+        aria-valuemin="30" aria-valuemax="70" aria-valuenow="54" hidden></div>
+      <aside id="solution-panel" class="solution-panel" aria-labelledby="solution-panel-heading" hidden>
+        <header class="solution-panel-header">
+          <h2 id="solution-panel-heading">答案与解析</h2>
+          <span id="solution-number"></span>
+        </header>
+        <div id="solution-scroll" class="solution-scroll">
+          <div id="solution-veil" class="solution-veil">
+            <div class="veil-lines" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <p id="solution-veil-label">点击「看答案」展开解析</p>
+          </div>
+          <section id="solution" class="solution" aria-label="题目解析" hidden>
+            <p id="answer-feedback" role="status" tabindex="-1" hidden></p>
+            <h3>答案</h3><p id="answer"></p>
+            <div id="answer-images"></div>
+            <section id="rubric" class="review-block" aria-labelledby="rubric-heading" hidden>
+              <h3 id="rubric-heading" tabindex="-1">采分点</h3>
+              <p id="rubric-summary" role="status"></p>
+              <ul id="rubric-list"></ul>
+              <p id="rubric-source" class="provenance"></p>
+            </section>
+            <section id="reasoning" class="reasoning" aria-labelledby="reasoning-heading" hidden>
+              <h3 id="reasoning-heading">本题解析</h3>
+              <p id="reasoning-book" class="reasoning-location"></p>
+              <p id="reasoning-status" class="reasoning-status" hidden></p>
+              <p id="reasoning-text"></p>
+              <p id="reasoning-supplement" hidden></p>
+              <p id="reasoning-note" class="reasoning-location" hidden></p>
+              <div id="reasoning-evidence" class="reasoning-location" hidden>
+                <span id="reasoning-credit"></span>
+                <details id="reasoning-sources">
+                  <summary>参考出处</summary>
+                  <ul id="reasoning-source-list"></ul>
+                </details>
+              </div>
+            </section>
+            <details id="original-option-analysis" class="provenance" hidden>
+              <summary>资料解析原文</summary>
+              <ul id="original-option-list"></ul>
+              <p id="original-analysis-evidence" class="provenance" hidden></p>
+            </details>
+            <h3 id="analysis-heading">逐项解析</h3><ul id="analysis"></ul>
+            <p id="analysis-evidence" class="provenance" hidden></p>
+            <section id="study-context" class="review-block" aria-labelledby="study-context-heading" hidden>
+              <h3 id="study-context-heading">关联知识</h3>
+              <div id="study-context-list"></div>
+            </section>
+            <h3>考点</h3><p id="topics"></p>
+            <p id="provenance" class="provenance"></p>
+            <details id="alternate-sources" class="provenance" hidden>
+              <summary>同题的其他出处</summary>
+              <ul id="source-list"></ul>
+            </details>
+          </section>
+          <section id="attempt-history" class="attempt-history" aria-labelledby="attempt-history-heading" hidden>
+            <h3 id="attempt-history-heading">答题记录</h3>
+            <p id="history-progress" role="status"></p>
+            <ol id="attempt-list" reversed></ol>
+          </section>
+        </div>
+        <section id="note-editor" class="note-editor" aria-labelledby="solution-panel-heading" hidden>
+          <div class="field"><label for="note-text" class="visually-hidden">本题笔记</label><textarea id="note-text" rows="8" maxlength="4000" placeholder="记下易错点或自己的解题方法"></textarea></div>
+          <div class="note-actions">
+            <button type="button" class="button primary" id="save-note">保存笔记</button>
+            <button type="button" class="button secondary" id="close-note">关闭笔记</button>
+            <button type="button" class="button secondary" id="delete-note" hidden>删除笔记</button>
+          </div>
+          <p id="note-status" role="status"></p>
+        </section>
+      </aside>
+      <details id="jump-panel" class="jump" hidden>
+        <summary>题号导航</summary>
+        <div class="nav-legend" aria-hidden="true">
+          <span data-state="unanswered">未作答</span><span data-state="current">当前</span>
+          <span data-state="correct">答对</span><span data-state="wrong">答错</span>
+        </div>
+        <div id="question-list"></div>
+      </details>
+    </div>
+  </main>
+</body>
+</html>

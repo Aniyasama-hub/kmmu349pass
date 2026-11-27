@@ -1,0 +1,94 @@
+[
+  {
+    "id": "demo-term-affinity",
+    "name": "效价",
+    "aliases": [
+      "Potency"
+    ],
+    "subject": "药理学",
+    "chapter": "药物效应动力学",
+    "kind": "名词",
+    "sections": [
+      {
+        "label": "定义",
+        "text": "产生指定效应所需的剂量或浓度。比较效价时应采用相同效应水平。"
+      }
+    ],
+    "sources": [
+      {
+        "label": "原创演示",
+        "locator": "demo-term-affinity"
+      }
+    ],
+    "related": []
+  },
+  {
+    "id": "demo-term-disintegration",
+    "name": "崩解",
+    "aliases": [
+      "Disintegration"
+    ],
+    "subject": "药剂学",
+    "chapter": "片剂",
+    "kind": "名词",
+    "sections": [
+      {
+        "label": "定义",
+        "text": "固体制剂在规定条件下碎裂成颗粒或碎片的过程。"
+      }
+    ],
+    "sources": [
+      {
+        "label": "原创演示",
+        "locator": "demo-term-disintegration"
+      }
+    ],
+    "related": []
+  },
+  {
+    "id": "demo-term-enantiomer",
+    "name": "对映异构体",
+    "aliases": [
+      "Enantiomer"
+    ],
+    "subject": "药物化学",
+    "chapter": "药物结构与性质",
+    "kind": "名词",
+    "sections": [
+      {
+        "label": "定义",
+        "text": "互为镜像且不能完全重合的立体异构体。"
+      }
+    ],
+    "sources": [
+      {
+        "label": "原创演示",
+        "locator": "demo-term-enantiomer"
+      }
+    ],
+    "related": []
+  },
+  {
+    "id": "demo-term-precision",
+    "name": "精密度",
+    "aliases": [
+      "Precision"
+    ],
+    "subject": "药物分析",
+    "chapter": "分析方法验证",
+    "kind": "名词",
+    "sections": [
+      {
+        "label": "定义",
+        "text": "同一均匀供试品按规定条件重复测定时，各结果之间的一致程度。"
+      }
+    ],
+    "sources": [
+      {
+        "label": "原创演示",
+        "locator": "demo-term-precision"
+      }
+    ],
+    "related": []
+  }
+]

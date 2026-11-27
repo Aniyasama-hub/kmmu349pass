@@ -1,0 +1,583 @@
+[
+  {
+    "id": "demo-pharmacology-01",
+    "subject": "药理学",
+    "chapter": "药物效应动力学",
+    "type": "单选题",
+    "stem": "竞争性拮抗作用的经典表现是什么？",
+    "options": [
+      {
+        "label": "A",
+        "text": "激动剂的量效曲线右移，最大效应可保持"
+      },
+      {
+        "label": "B",
+        "text": "激动剂达到最大效应所需浓度降低"
+      },
+      {
+        "label": "C",
+        "text": "拮抗剂单独产生与完全激动剂相同的效应"
+      }
+    ],
+    "correct": [
+      "A"
+    ],
+    "answer": "A。最大效应可保持，表观效价降低。",
+    "complete": true,
+    "topics": [
+      "受体拮抗"
+    ],
+    "images": [],
+    "analysis": [],
+    "source": {
+      "kind": "practice",
+      "label": "原创演示",
+      "locator": "demo-pharmacology-01"
+    },
+    "textbook": {
+      "chapterOrder": 1,
+      "sectionOrder": 1,
+      "section": "受体拮抗",
+      "topicOrder": {
+        "受体拮抗": 1
+      }
+    },
+    "reasoning": {
+      "text": "可逆竞争性拮抗剂与激动剂竞争受体。提高激动剂浓度可以增加受体占据并恢复最大效应。",
+      "status": "worked",
+      "authorship": "AI生成",
+      "references": [],
+      "book": {
+        "file": "原创演示",
+        "locator": "受体拮抗"
+      }
+    },
+    "optionExplanations": {
+      "reasons": {
+        "A": "在经典模型中需要更高浓度的激动剂达到同一效应，曲线向右移。",
+        "B": "在同一效应水平上通常需要更高的激动剂浓度。",
+        "C": "拮抗剂本身无激动受体产生相同效应的内在活性。"
+      },
+      "references": []
+    },
+    "studyEvidence": {
+      "stem": [
+        {
+          "title": "受体拮抗",
+          "text": "效价描述产生指定效应所需的剂量或浓度，最大效应则描述可达到的效应上限。",
+          "kind": "knowledge"
+        }
+      ],
+      "options": {}
+    }
+  },
+  {
+    "id": "demo-pharmacology-02",
+    "subject": "药理学",
+    "chapter": "药物效应动力学",
+    "type": "简答题",
+    "stem": "简述药效学和药动学的区别。",
+    "options": [],
+    "correct": [],
+    "answer": "药效学研究药物对机体的作用和机制。药动学研究药物在体内的吸收、分布、代谢和排泄。",
+    "complete": true,
+    "topics": [
+      "药效学与药动学"
+    ],
+    "images": [],
+    "analysis": [],
+    "source": {
+      "kind": "practice",
+      "label": "原创演示",
+      "locator": "demo-pharmacology-02"
+    },
+    "textbook": {
+      "chapterOrder": 1,
+      "sectionOrder": 1,
+      "section": "药效学与药动学",
+      "topicOrder": {
+        "药效学与药动学": 1
+      }
+    },
+    "reasoning": {
+      "text": "先区分因果方向。药物改变机体功能属于药效学，机体处理药物并改变其体内暴露属于药动学。",
+      "status": "worked",
+      "authorship": "AI生成",
+      "references": [],
+      "book": {
+        "file": "原创演示",
+        "locator": "药效学与药动学"
+      }
+    },
+    "optionExplanations": {
+      "reasons": {},
+      "references": []
+    },
+    "studyEvidence": {
+      "stem": [
+        {
+          "title": "药效学与药动学",
+          "text": "先区分因果方向。药物改变机体功能属于药效学，机体处理药物并改变其体内暴露属于药动学。",
+          "kind": "knowledge"
+        }
+      ],
+      "options": {}
+    },
+    "rubric": {
+      "points": [
+        {
+          "label": "答出药效学研究药物作用，以及药动学研究药物在体内的过程。",
+          "groups": [
+            [
+              "药物对机体",
+              "药物作用",
+              "作用机制"
+            ],
+            [
+              "吸收分布代谢排泄",
+              "体内过程",
+              "ADME"
+            ]
+          ]
+        }
+      ],
+      "basis": "演示题参考答案",
+      "note": ""
+    }
+  },
+  {
+    "id": "demo-formulation-01",
+    "subject": "药剂学",
+    "chapter": "片剂",
+    "type": "多选题",
+    "stem": "制备普通片剂时，哪些材料可分别用于改善崩解和润滑？",
+    "options": [
+      {
+        "label": "A",
+        "text": "交联聚维酮"
+      },
+      {
+        "label": "B",
+        "text": "硬脂酸镁"
+      },
+      {
+        "label": "C",
+        "text": "纯化水本身"
+      }
+    ],
+    "correct": [
+      "A",
+      "B"
+    ],
+    "answer": "A、B。交联聚维酮常用于改善崩解，硬脂酸镁常用作润滑剂。",
+    "complete": true,
+    "topics": [
+      "片剂辅料"
+    ],
+    "images": [],
+    "analysis": [],
+    "source": {
+      "kind": "practice",
+      "label": "原创演示",
+      "locator": "demo-formulation-01"
+    },
+    "textbook": {
+      "chapterOrder": 1,
+      "sectionOrder": 1,
+      "section": "片剂辅料",
+      "topicOrder": {
+        "片剂辅料": 1
+      }
+    },
+    "reasoning": {
+      "text": "将两个目标拆开。崩解剂有助于片剂吸水后裂解，润滑剂降低压片与脱模过程的摩擦。",
+      "status": "worked",
+      "authorship": "AI生成",
+      "references": [],
+      "book": {
+        "file": "原创演示",
+        "locator": "片剂辅料"
+      }
+    },
+    "optionExplanations": {
+      "reasons": {
+        "A": "交联聚维酮可吸水并促进片剂崩解。",
+        "B": "硬脂酸镁能减小片剂与模壁的摩擦。",
+        "C": "纯化水可用作湿法制粒的液体介质，不能承担本题两项辅料功能。"
+      },
+      "references": []
+    },
+    "studyEvidence": {
+      "stem": [
+        {
+          "title": "片剂辅料",
+          "text": "润滑剂用量过多或混合过久可影响润湿。处方设计同时关注压片性能、崩解和溶出。",
+          "kind": "knowledge"
+        }
+      ],
+      "options": {}
+    }
+  },
+  {
+    "id": "demo-formulation-02",
+    "subject": "药剂学",
+    "chapter": "片剂",
+    "type": "简答题",
+    "stem": "简述片剂崩解与溶出的区别。",
+    "options": [],
+    "correct": [],
+    "answer": "崩解是片剂破碎为颗粒的过程。溶出是药物从制剂中的固态进入溶液的过程。",
+    "complete": true,
+    "topics": [
+      "崩解与溶出"
+    ],
+    "images": [],
+    "analysis": [],
+    "source": {
+      "kind": "practice",
+      "label": "原创演示",
+      "locator": "demo-formulation-02"
+    },
+    "textbook": {
+      "chapterOrder": 1,
+      "sectionOrder": 1,
+      "section": "崩解与溶出",
+      "topicOrder": {
+        "崩解与溶出": 1
+      }
+    },
+    "reasoning": {
+      "text": "一个评价制剂外观从整片到碎片，另一个评价介质中药物分子浓度随时间的变化。",
+      "status": "worked",
+      "authorship": "AI生成",
+      "references": [],
+      "book": {
+        "file": "原创演示",
+        "locator": "崩解与溶出"
+      }
+    },
+    "optionExplanations": {
+      "reasons": {},
+      "references": []
+    },
+    "studyEvidence": {
+      "stem": [
+        {
+          "title": "崩解与溶出",
+          "text": "一个评价制剂外观从整片到碎片，另一个评价介质中药物分子浓度随时间的变化。",
+          "kind": "knowledge"
+        }
+      ],
+      "options": {}
+    },
+    "rubric": {
+      "points": [
+        {
+          "label": "区分片剂的物理碎裂和药物进入溶液。",
+          "groups": [
+            [
+              "破碎",
+              "崩解",
+              "裂解"
+            ],
+            [
+              "进入溶液",
+              "溶解",
+              "药物分子浓度"
+            ]
+          ]
+        }
+      ],
+      "basis": "演示题参考答案",
+      "note": ""
+    }
+  },
+  {
+    "id": "demo-chemistry-01",
+    "subject": "药物化学",
+    "chapter": "药物结构与性质",
+    "type": "单选题",
+    "stem": "常见酯键完全水解后，通常可以生成什么？",
+    "options": [
+      {
+        "label": "A",
+        "text": "羧酸与醇"
+      },
+      {
+        "label": "B",
+        "text": "两个酮"
+      },
+      {
+        "label": "C",
+        "text": "两个醚"
+      }
+    ],
+    "correct": [
+      "A"
+    ],
+    "answer": "A。羧酸与醇，碱性介质中羧酸通常以盐的形式存在。",
+    "complete": true,
+    "topics": [
+      "酯键水解"
+    ],
+    "images": [],
+    "analysis": [],
+    "source": {
+      "kind": "practice",
+      "label": "原创演示",
+      "locator": "demo-chemistry-01"
+    },
+    "textbook": {
+      "chapterOrder": 1,
+      "sectionOrder": 1,
+      "section": "酯键水解",
+      "topicOrder": {
+        "酯键水解": 1
+      }
+    },
+    "reasoning": {
+      "text": "酯键中的酰氧连接断开后，酰基部分对应羧酸或羧酸盐，烷氧基部分对应醇。",
+      "status": "worked",
+      "authorship": "AI生成",
+      "references": [],
+      "book": {
+        "file": "原创演示",
+        "locator": "酯键水解"
+      }
+    },
+    "optionExplanations": {
+      "reasons": {
+        "A": "羧酸或其盐来自酰基部分，醇来自酯的烷氧部分。",
+        "B": "酮缺少酯基的酰氧连接，属于另一类官能团。",
+        "C": "醚键是碳氧碳连接，不是该水解得到的两个产物。"
+      },
+      "references": []
+    },
+    "studyEvidence": {
+      "stem": [
+        {
+          "title": "酯键水解",
+          "text": "药物中引入酯基可改变脂溶性，也可能引入化学或酶促水解途径。",
+          "kind": "knowledge"
+        }
+      ],
+      "options": {}
+    }
+  },
+  {
+    "id": "demo-chemistry-02",
+    "subject": "药物化学",
+    "chapter": "药物结构与性质",
+    "type": "简答题",
+    "stem": "什么是对映异构体？",
+    "options": [],
+    "correct": [],
+    "answer": "互为镜像且不能完全重合的一对立体异构体。",
+    "complete": true,
+    "topics": [
+      "立体化学"
+    ],
+    "images": [],
+    "analysis": [],
+    "source": {
+      "kind": "practice",
+      "label": "原创演示",
+      "locator": "demo-chemistry-02"
+    },
+    "textbook": {
+      "chapterOrder": 1,
+      "sectionOrder": 1,
+      "section": "立体化学",
+      "topicOrder": {
+        "立体化学": 1
+      }
+    },
+    "reasoning": {
+      "text": "判断两结构是否互为镜像，并检查能否通过刚性旋转和平移使全部原子重合。",
+      "status": "worked",
+      "authorship": "AI生成",
+      "references": [],
+      "book": {
+        "file": "原创演示",
+        "locator": "立体化学"
+      }
+    },
+    "optionExplanations": {
+      "reasons": {},
+      "references": []
+    },
+    "studyEvidence": {
+      "stem": [
+        {
+          "title": "立体化学",
+          "text": "判断两结构是否互为镜像，并检查能否通过刚性旋转和平移使全部原子重合。",
+          "kind": "knowledge"
+        }
+      ],
+      "options": {}
+    },
+    "rubric": {
+      "points": [
+        {
+          "label": "同时具备镜像关系和不可重合。",
+          "groups": [
+            [
+              "镜像"
+            ],
+            [
+              "不能重合",
+              "不可重合",
+              "不重合"
+            ]
+          ]
+        }
+      ],
+      "basis": "演示题参考答案",
+      "note": ""
+    }
+  },
+  {
+    "id": "demo-analysis-01",
+    "subject": "药物分析",
+    "chapter": "分析方法验证",
+    "type": "单选题",
+    "stem": "评价多次重复测定结果之间的一致性，用哪个指标？",
+    "options": [
+      {
+        "label": "A",
+        "text": "精密度"
+      },
+      {
+        "label": "B",
+        "text": "准确度"
+      },
+      {
+        "label": "C",
+        "text": "检测限"
+      }
+    ],
+    "correct": [
+      "A"
+    ],
+    "answer": "A。精密度。",
+    "complete": true,
+    "topics": [
+      "精密度与准确度"
+    ],
+    "images": [],
+    "analysis": [],
+    "source": {
+      "kind": "practice",
+      "label": "原创演示",
+      "locator": "demo-analysis-01"
+    },
+    "textbook": {
+      "chapterOrder": 1,
+      "sectionOrder": 1,
+      "section": "精密度与准确度",
+      "topicOrder": {
+        "精密度与准确度": 1
+      }
+    },
+    "reasoning": {
+      "text": "题问一组重复测定值彼此接近的程度。它评价测量结果的离散程度，属于精密度。",
+      "status": "worked",
+      "authorship": "AI生成",
+      "references": [],
+      "book": {
+        "file": "原创演示",
+        "locator": "精密度与准确度"
+      }
+    },
+    "optionExplanations": {
+      "reasons": {
+        "A": "精密度评价重复测定的一致性，可用标准偏差或相对标准偏差表达。",
+        "B": "准确度评价测得值与参考值的接近程度。",
+        "C": "检测限考虑能被发现的较低待测量水平。"
+      },
+      "references": []
+    },
+    "studyEvidence": {
+      "stem": [
+        {
+          "title": "精密度与准确度",
+          "text": "测得结果可以集中在某个偏离参考值的位置。此时精密度较好，准确度仍可能较差。",
+          "kind": "knowledge"
+        }
+      ],
+      "options": {}
+    }
+  },
+  {
+    "id": "demo-analysis-02",
+    "subject": "药物分析",
+    "chapter": "含量测定",
+    "type": "简答题",
+    "stem": "相同波长、光程和线性条件下，写出用吸光度比值估算样品浓度的公式。",
+    "options": [],
+    "correct": [],
+    "answer": "样品浓度等于样品吸光度除以对照吸光度，再乘以对照浓度。",
+    "complete": true,
+    "topics": [
+      "对照品比较"
+    ],
+    "images": [],
+    "analysis": [],
+    "source": {
+      "kind": "practice",
+      "label": "原创演示",
+      "locator": "demo-analysis-02"
+    },
+    "textbook": {
+      "chapterOrder": 1,
+      "sectionOrder": 1,
+      "section": "对照品比较",
+      "topicOrder": {
+        "对照品比较": 1
+      }
+    },
+    "reasoning": {
+      "text": "在吸光度与浓度成正比的条件下，两份溶液的同一比例常数相消，得到浓度比等于吸光度比。",
+      "status": "worked",
+      "authorship": "AI生成",
+      "references": [],
+      "book": {
+        "file": "原创演示",
+        "locator": "对照品比较"
+      }
+    },
+    "optionExplanations": {
+      "reasons": {},
+      "references": []
+    },
+    "studyEvidence": {
+      "stem": [
+        {
+          "title": "对照品比较",
+          "text": "在吸光度与浓度成正比的条件下，两份溶液的同一比例常数相消，得到浓度比等于吸光度比。",
+          "kind": "knowledge"
+        }
+      ],
+      "options": {}
+    },
+    "rubric": {
+      "points": [
+        {
+          "label": "写出吸光度之比乘对照浓度。",
+          "groups": [
+            [
+              "样品吸光度",
+              "吸光度比"
+            ],
+            [
+              "对照浓度",
+              "标准浓度"
+            ]
+          ]
+        }
+      ],
+      "basis": "演示题参考答案",
+      "note": ""
+    }
+  }
+]
