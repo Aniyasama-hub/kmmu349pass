@@ -98,6 +98,10 @@ def prepare(questions_file, terms_file, assets, target):
         shutil.copytree(ROOT / FRONTEND, frontend)
         for name in ('local_study.py', '启动题库.cmd'):
             shutil.copy2(ROOT / name, app / name)
+        for directory in ('windows', 'mobile'):
+            shutil.copytree(ROOT / directory, app / directory)
+        (app / 'tools').mkdir()
+        shutil.copy2(ROOT / 'tools' / 'build_mobile.py', app / 'tools' / 'build_mobile.py')
         for row in questions:
             for image in row['images']:
                 if not isinstance(image, dict) or image.get('section') not in {'stem', 'answer'}:
@@ -111,7 +115,7 @@ def prepare(questions_file, terms_file, assets, target):
                 destination = frontend / relative
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(source, destination)
-                image['path'] = relative.as_posix()
+                image['path'] = f'{FRONTEND}/{relative.as_posix()}'
         write_script(frontend / '题库.js', 'questionBank', questions)
         write_script(frontend / '知识库.js', 'knowledgeCatalog', terms)
         app.rename(target)

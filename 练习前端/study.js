@@ -362,7 +362,7 @@ function scopedRows() {
       .sort((a, b) => (a.source.order ?? 1000) - (b.source.order ?? 1000));
   }
   const mix = $("mix").value;
-  return subjectRows().filter((q) => usable(q) && (
+  return subjectRows().filter((q) => usable(q) && !q.pairingAnswers && (
     mix === "mixed" ? isPractice(q) || isExam(q) : mix === "practice" ? isPractice(q) : isExam(q)
   ));
 }
@@ -558,7 +558,7 @@ function renderFigures(container, q, section) {
   container.replaceChildren(...images.map((image) => {
     const el = document.createElement("img");
     el.className = "figure";
-    el.src = "../" + image.path;
+    el.src = image.path.replace(/^练习前端\//, "");
     el.alt = image.alt || `原资料中的${section === "stem" ? "题目" : "答案"}图示`;
     return el;
   }));
@@ -578,7 +578,7 @@ function renderOptions(current, q) {
   $("options").hidden = !q.options.length;
   const response = current.responses[q.id] ?? [];
   const selected = current.submitted ? response : current.optionDrafts[q.id] ?? response;
-  const editable = !current.submitted && !current.revealed[q.id] && !response.length && !current.skipped[q.id];
+  const editable = !q.pairingAnswers && !current.submitted && !current.revealed[q.id] && !response.length && !current.skipped[q.id];
   const excluded = current.exclusions[q.id] ??= new Set();
   $("option-list").replaceChildren(...optionOrder(current, q).map((option) => {
     const display = option.label;
@@ -640,10 +640,10 @@ function renderChoiceActions(current, q) {
   const editable = !current.submitted && !current.skipped[q.id] && (!current.revealed[q.id] || isTimedMode());
   const canEditConfirmation = confirmed && editable && isTimedMode();
   $("choice-actions").hidden = !q.options.length;
-  $("choice-status").hidden = !canEditConfirmation;
-  $("choice-status").textContent = "选项已确认";
+  $("choice-status").hidden = !canEditConfirmation && !q.pairingAnswers;
+  $("choice-status").textContent = q.pairingAnswers ? "配伍题 · 查看答案核对各小问" : "选项已确认";
   $("check-options").hidden = canEditConfirmation;
-  $("check-options").disabled = !editable || confirmed || !current.optionDrafts[q.id]?.length;
+  $("check-options").disabled = Boolean(q.pairingAnswers) || !editable || confirmed || !current.optionDrafts[q.id]?.length;
   $("edit-options").hidden = !canEditConfirmation;
   $("dont-know").disabled = !canMarkUnknown(current, q);
 }
@@ -758,7 +758,7 @@ function confirmOptions() {
   const current = session();
   const q = currentQuestion();
   const draft = current.optionDrafts[q.id];
-  if (current.submitted || current.skipped[q.id] || current.revealed[q.id] || current.responses[q.id] || !draft?.length) return;
+  if (q.pairingAnswers || current.submitted || current.skipped[q.id] || current.revealed[q.id] || current.responses[q.id] || !draft?.length) return;
   current.responses[q.id] = draft;
   delete current.optionDrafts[q.id];
   markStudyDay();
@@ -794,7 +794,7 @@ function confirmOptions() {
 }
 
 function canMarkUnknown(current, q) {
-  return !current.submitted && !current.skipped[q.id] && typeof current.outcomes[q.id] !== "boolean" &&
+  return !q.pairingAnswers && !current.submitted && !current.skipped[q.id] && typeof current.outcomes[q.id] !== "boolean" &&
     !(q.options.length && hasResponse(current.responses[q.id]));
 }
 
@@ -861,7 +861,7 @@ function renderSolution(current, q) {
   renderRubric(current, q);
   const exactAnalysis = q.analysisOriginal ?? [];
   const originalReason = q.reasoning?.authorship === "原文";
-  renderReasoning(exactAnalysis.length && !originalReason ? null : q.reasoning);
+  renderReasoning(exactAnalysis.length && !originalReason && !q.writingBatch ? null : q.reasoning);
   renderExplanations(q, labels, reordered);
   renderStudyContext(q.studyEvidence?.stem ?? q.studyContext);
   $("topics").textContent = q.topics.join("、") || q.chapter || "待原题补齐";
@@ -906,7 +906,10 @@ function renderExplanations(q, labels, ordered) {
     const keyed = labels.includes(label);
     state.className = "analysis-state";
     state.dataset.verdict = !labels.length ? "pending" : keyed ? "select" : "reject";
-    state.textContent = label + (labels.length ? (keyed ? "　应选" : "　不选") : "");
+    const pair = q.pairingAnswers?.indexOf(label) ?? -1;
+    if (q.pairingAnswers) state.dataset.verdict = pair >= 0 ? "select" : "reject";
+    state.textContent = label + (q.pairingAnswers ? (pair >= 0 ? ("　第 " + (pair + 1) + " 问") : "　不选")
+      : labels.length ? (keyed ? "　应选" : "　不选") : "");
     const title = document.createElement("h4");
     title.append(state, "　", text);
     li.append(title);
@@ -1119,7 +1122,7 @@ function currentQuestion() {
 
 function correctLabels(q) {
   const explicit = Array.isArray(q.correct) ? q.correct : null;
-  if (!q.options.length || !usable(q) || !explicit || q.optionExplanations?.conflict) return [];
+  if (!q.options.length || !usable(q) || !explicit || q.pairingAnswers || q.optionExplanations?.conflict) return [];
   const allowed = new Set(q.options.map((o) => o.label));
   const labels = unique(explicit);
   return labels.every((label) => allowed.has(label)) ? labels.sort() : [];
@@ -1371,7 +1374,7 @@ function exportSaved() {
       const original = selectedAnalysis.filter(({text}) => text &&
         !(q.reasoning?.authorship === "原文" && q.reasoning.text.includes(text))).map(({label,text,source}) =>
         line((label ? label + "　" : "") + text) + (source ? "\n原文出处　" + source.file + " · " + source.locator : ""));
-      const reason = hasOriginal && q.reasoning?.authorship !== "原文" ? "" : q.reasoning?.text;
+      const reason = hasOriginal && q.reasoning?.authorship !== "原文" && !q.writingBatch ? "" : q.reasoning?.text;
       const evidence = q.studyEvidence;
       const optionReasons = q.options.map(({label,text}) => {
         const reason = q.optionExplanations?.reasons?.[label];

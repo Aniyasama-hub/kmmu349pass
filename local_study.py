@@ -1,6 +1,7 @@
 import argparse
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -22,7 +23,10 @@ LIMIT = 8 * 1024 * 1024
 
 class Profile:
     def __init__(self, filename):
-        self.filename = filename
+        self.filename = Path(filename).resolve()
+        normalized = os.path.normcase(str(self.filename))
+        digest = hashlib.sha256(normalized.encode('utf-8')).hexdigest()[:16]
+        self.marker = ('Kunming349 profile v2:' + digest).encode('ascii')
         self.lock = Lock()
         self.entries = self.read()
 
@@ -83,7 +87,7 @@ class Handler(SimpleHTTPRequestHandler):
             return self.send_body(403, 'text/plain', b'Loopback only')
         path = self.path.split('?', 1)[0]
         if path == TOKEN_PATH:
-            return self.send_body(200, 'text/plain', b'Kunming349 profile v2')
+            return self.send_body(200, 'text/plain', self.profile.marker)
         if path == '/':
             self.send_response(302)
             self.send_header('Location', STUDY_URL)
@@ -96,11 +100,19 @@ class Handler(SimpleHTTPRequestHandler):
             with self.profile.lock:
                 body = ('window.studyDiskSeed = ' + json.dumps(self.profile.entries, ensure_ascii=True) + ';\n').encode('ascii')
             return self.send_body(200, 'application/javascript; charset=utf-8', body)
+        if not self.is_frontend_file():
+            return self.send_body(404, 'text/plain', b'Not found')
         return super().do_GET()
+
+    def is_frontend_file(self):
+        target = Path(self.translate_path(self.path)).resolve()
+        return target.is_relative_to(ROOT / '练习前端') and target.is_file()
 
     def do_HEAD(self):
         if self.headers.get('Host') != self.host or self.path.split('?', 1)[0].upper() == BOOT.upper():
             return self.send_body(403, 'text/plain', b'')
+        if not self.is_frontend_file():
+            return self.send_body(404, 'text/plain', b'')
         return super().do_HEAD()
 
     def do_POST(self):
@@ -132,8 +144,11 @@ class Handler(SimpleHTTPRequestHandler):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--port', type=int, default=8949)
-    parser.add_argument('--profile', type=Path, default=Path(os.environ.get('LOCALAPPDATA') or Path.home()) / 'Kunming349' / 'profile.json')
+    local_app_data = Path(os.environ.get('LOCALAPPDATA', ROOT))
+    default_profile = (local_app_data / 'Kunming349' / 'Profile' / 'profile.json'
+                       if os.name == 'nt' else ROOT / '.preview-profile' / 'profile.json')
+    parser.add_argument('--port', type=int, default=8952)
+    parser.add_argument('--profile', type=Path, default=default_profile)
     parser.add_argument('--no-browser', action='store_true')
     args = parser.parse_args()
     base = f'http://127.0.0.1:{args.port}'
@@ -144,7 +159,7 @@ def main():
     except OSError:
         try:
             with urlopen(base + TOKEN_PATH, timeout=1) as response:
-                if response.read(80) != b'Kunming349 profile v2':
+                if response.read(80) != profile.marker:
                     raise ValueError('wrong service')
         except (URLError, ValueError, OSError):
             raise SystemExit(f'端口 {args.port} 已被占用。')

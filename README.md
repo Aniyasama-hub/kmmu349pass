@@ -1,56 +1,45 @@
+<p align="center">
+  <img src="assets/logo.png" width="176" alt="昆医349刷题标志">
+</p>
+
 # 昆医 349 药学综合刷题系统
 
-面向**昆明医科大学 349 药学综合自命题**的本地刷题工具，覆盖**药理学、药物化学、药剂学、药物分析**四科，适合按教材章节刷题、组卷和整理复习记录。
+面向**昆明医科大学 349 药学综合自命题**备考，覆盖**药理学、药物化学、药剂学、药物分析**。同一套 HTML、CSS 和 JavaScript 界面可在 Windows 独立窗口、电脑浏览器和手机上使用。
 
-这是我备考时赶工做的自用系统。这次整理的是多智能体协作前的版本。仓库代码含 8 道自编演示题，完整练习数据由我自备的资料整理，随 Release 公布。你也可以自行整理资料并导入。欢迎 fork、修改并做成自己的独立版本。后续我计划重做题库导入和科目配置，支持个人直接上传资料，逐步适配更多专业课。
+## 功能
 
-## 下载正式版
+- **章节练习**　精选题库和强化题库支持按科目、教材章节、考点和题型筛选，可搜索题干、断点续做。
+- **真题与模拟**　按年份训练真题，或从题库随机抽题限时模拟。分别统计客观题、主观题正确率和用时。
+- **答案与解析**　查看题源、解题分析、逐项说明和关联知识。主观题支持按采分点给出关键词匹配反馈。
+- **知识导航**　按药名、别名和教材术语搜索词条，查看药理作用、用途与关联药物。
+- **复习记录**　收藏题目和词条、整理错题、写笔记，查看学习天数与考研倒计时。设置中可备份和导入个人数据，错题与收藏可导出 Markdown 或纯文本。
 
-在 [Releases](https://github.com/Aniyasama-hub/kmmu349pass/releases/latest) 下载 Windows 完整包。它内置协作前版本的 **8,302 道题**、**3,239 条知识词条**和 **214 张题图**。完整包解压后可用启动器直接刷题。
+## 下载与启动
 
-[题库元信息包](https://github.com/Aniyasama-hub/kmmu349pass/releases/download/v0.1.0/kmmu349pass-v0.1.0-question-bank.zip) 单独提供题目和词条 JSON 与配套题图。解压后可查看数据，或用下文的工具导入。题目来自自备真题、复习资料和习题，题内记录了现有出处。
+从 [Releases](https://github.com/Aniyasama-hub/kmmu349pass/releases) 下载桌面与手机合集或题库元信息。在 Windows x64 安装 **Python 3.10+**（加入 PATH）和 [Microsoft Edge WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/)。解压后双击 **Windows桌面版**里的 **启动题库.cmd**。
 
-## 安装与启动
+电脑也能直接打开 **练习前端/index.html**。在项目目录执行 **python -X utf8 local_study.py** 可启动本机服务并将学习记录写入磁盘。
 
-1. 使用 Windows 完整包时直接解压。使用源码版时，在 GitHub 点击 **Code → Download ZIP** 并解压，或使用 `git clone https://github.com/Aniyasama-hub/kmmu349pass.git`。
-2. Windows 安装 **Python 3.10 或更新版本**，确保 `py` 或 `python` 可在终端使用。浏览器建议使用近期版本的 Edge 或 Chrome。
-3. 双击 `启动题库.cmd`。也可以在项目根目录执行 `python -X utf8 local_study.py`，然后打开 `http://127.0.0.1:8949/`。
+手机版目录可作为静态站点部署，入口为 **index.html**。通过 HTTPS 打开后，可在 Android Chrome 安装，或在 iPhone Safari 添加到主屏幕。首次联网打开，设置中出现「离线题库可用」后可断网练习。 [手机版构建与安装](mobile/README.md)
 
-Python 后端使用标准库。前端是原生 HTML、CSS 和 JavaScript，无需安装 pip 包、Node.js 或数据库。直接打开 `练习前端/index.html` 也能试用，学习数据保存在当前浏览器的本地存储。
+## 题库与结构
 
-在 Windows 以外的系统可尝试 Python 命令启动。此版的启动器及完整流程在 Windows 上验证。若本机已有另一套题库运行，使用 `--port 8950` 开新端口。
+题目、知识词条和题图可随应用使用，也可以导入自己整理的结构化资料。源码自带演示数据，完整题库随应用包提供。
 
-## 系统结构
-
-| 文件或模块 | 用途 |
+| 目录或文件 | 用途 |
 | --- | --- |
-| `启动题库.cmd`、`local_study.py` | 启动回环 HTTP 服务，提供本机学习档案读写接口 |
-| `练习前端/index.html`、`study.css` | 模式菜单、筛选、题目区、答案与笔记区及自适应布局 |
-| `练习前端/study.js` | 管理精选、强化、冲刺模拟、按年真题训练及作答流程 |
-| `练习前端/grading.js`、`progress.js` | 客观题评分、主观题采分点匹配、进度和断点续做 |
-| `练习前端/knowledge.js` | 搜索知识词条、查看关联药物及收藏 |
-| `练习前端/profile.js`、`profile-boot.js` | 管理浏览器状态与本机档案同步，静态入口为空种子 |
-| `练习前端/题库.js`、`知识库.js` | 前端读取的题目与词条数据，仓库内为自编演示 |
-| `examples/`、`tools/prepare_bank.py` | JSON 示例和本地题库准备工具 |
+| 练习前端/ | 共用界面、答题流程、评分与知识导航 |
+| windows/、启动题库.cmd | Windows 独立窗口和启动器 |
+| local_study.py | Python 标准库实现的本机服务和学习档案 |
+| mobile/、tools/build_mobile.py | 手机安装与离线资源、静态站点构建 |
+| examples/、tools/prepare_bank.py | 结构化数据示例和题库导入 |
 
-答题时可查看答案解析、确认选项、标记「不会」、收藏及写笔记。模拟支持随机抽题和限时，真题训练按数据里的年份和顺序出题。客观题与主观题分别统计，错题、笔记与断点保存在本机。
+使用自己的题库时，参考[题目示例](examples/题目元信息.json)和[词条示例](examples/知识词条.json)，再运行下列命令。
 
-## 使用自己的资料
-
-先将自己的题目整理为 UTF-8 JSON。参考 [题目示例](examples/题目元信息.json) 和 [词条示例](examples/知识词条.json)。本版读取结构化题库，PDF、Word 的自动拆题与上传界面是下一版计划。
-
-```powershell
+~~~powershell
 python -X utf8 tools/prepare_bank.py "D:/我的资料/题目元信息.json" --terms "D:/我的资料/知识词条.json"
-```
+~~~
 
-生成后打开 `.local/昆医349/启动题库.cmd`。词条 JSON 可省略。题图可放在题目文件旁的 `题图/` 或 `练习前端/题图/`。题图位于其他目录时，用 `--assets` 指定所在的资料根目录。要保留旧导入结果时，使用 `--output .local/另一套题库` 生成到新目录。
+导入结果在 **.local/昆医349/**，可通过 **--output** 另选目录。词条可省略，题图放在资料旁的 **题图/** 或 **练习前端/题图/**，也可以用 **--assets** 指定位置。真题按元信息中的年份和题号组织。
 
-- **题目**使用稳定的 `id`，填写 `subject`、`chapter`、`type`、`stem` 和 `source`。`source.kind` 可填 `practice`、`exam` 或 `recall`。真题和回忆题需有 `source.year`。若希望同一年的原卷顺序稳定，建议提供 `source.order`。
-- **客观题**用 `options` 存原字母和文本，`correct` 填正确字母数组，例如 `["A", "C"]`。主观题使用 `answer`，并可填写 `rubric.points` 作为采分点。
-- **知识导航**使用单独的词条 JSON，含词条名、别名、章节、分段定义及出处。关联药物可通过现有词条 ID 互相跳转。
-
-## 本机学习记录
-
-用启动器进入时，Windows 默认将记录写入 `%LOCALAPPDATA%\Kunming349\profile.json`。错题、收藏、笔记、考试日期、历史作答和统计由每位用户的设备自行保存。直接打开 HTML 时使用当前浏览器存储。齿轮菜单可导出和导入个人备份。要隔离多个题库的记录，可同时指定独立的端口和 `--profile` 路径，例如 `python -X utf8 local_study.py --port 8950 --profile .local/另一套-profile.json`。
-
-源码包中的自编样题用于演示操作。完整包和含真题的自备题库会按所收录的年份显示真题训练。欢迎围绕资料导入、题库结构和多科适配提交改进或维护自己的分支。
+Windows 桌面端的学习记录保存在 **%LOCALAPPDATA%/Kunming349/Profile/profile.json**，浏览器和手机端使用各自的本地存储。可在各设备上用设置中的「备份个人数据」和「导入备份」迁移。
